@@ -1,5 +1,7 @@
 package main
 
+// 参考: https://juejin.cn/post/7191085369847185468
+
 import (
 	"database/sql"
 	"fmt"
