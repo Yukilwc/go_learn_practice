@@ -1,13 +1,16 @@
 package lru
 
 import (
-	"fmt"
 	"testing"
 )
 
+type String string
+
+func (s String) Len() int {
+	return len(s)
+}
+
 func TestGet(t *testing.T) {
-	// t.Fatalf("failed")
-	gap := int64(0)
-	lru := New(gap, nil)
-	fmt.Println(lru, gap)
+	lru := New(int64(0), nil)
+	lru.Add("key1", String("abc"))
 }

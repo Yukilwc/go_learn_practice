@@ -70,3 +70,7 @@ func (c *Cache) Add(key string, value Value) {
 		c.RemoveOldest()
 	}
 }
+
+func (c *Cache) Len() int {
+	return c.ll.Len()
+}
