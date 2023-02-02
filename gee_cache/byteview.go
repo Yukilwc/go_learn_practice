@@ -24,3 +24,10 @@ func (v ByteView) ByteSlice() []byte {
 func (v ByteView) String() string {
 	return string(v.b)
 }
+
+// 工具函数
+func cloneBytes(b []byte) []byte {
+	c := make([]byte, len(b))
+	copy(c, b)
+	return c
+}
