@@ -2,7 +2,7 @@ package geecache
 
 import (
 	"fmt"
-	"go_test_init/gee_cache/lru"
+	"go_test_init/geecache/lru"
 	"sync"
 )
 
