@@ -52,7 +52,7 @@ func GetGroup(name string) *Group {
 }
 
 func (g *Group) RegisterPeers(peers PeerPicker) {
-	if peers != nil {
+	if g.peers != nil {
 		panic("RegisterPeerPicker called more than once")
 	}
 	g.peers = peers
