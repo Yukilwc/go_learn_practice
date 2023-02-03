@@ -16,6 +16,7 @@ type Group struct {
 	name      string
 	getter    Getter
 	mainCache cache
+	peers     PeerPicker
 }
 
 var (
@@ -44,4 +45,11 @@ func GetGroup(name string) *Group {
 	defer mu.RUnlock()
 	g := groups[name]
 	return g
+}
+
+func (g *Group) RegisterPeers(peers PeerPicker) {
+	if peers != nil {
+		panic("RegisterPeerPicker called more than once")
+	}
+	g.peers = peers
 }

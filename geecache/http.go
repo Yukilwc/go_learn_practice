@@ -89,6 +89,8 @@ func (p *HTTPPool) PickPeer(key string) (PeerGetter, bool) {
 	return nil, false
 }
 
+var _ PeerPicker = (*HTTPPool)(nil)
+
 // 客户端类
 type httpGetter struct {
 	baseURL string
