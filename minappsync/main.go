@@ -18,6 +18,7 @@ func main() {
 	fmt.Println("输入quit退出程序")
 	if err := loadConfig(); err != nil {
 		fmt.Println("配置载入错误:", err)
+		fmt.Scanln()
 		return
 	}
 	fmt.Println("小程序路径:", mpFolder)
