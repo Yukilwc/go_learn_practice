@@ -10,15 +10,18 @@ import (
 	"time"
 )
 
-var mpFolder = "D:/workspace/work/web/gitee/etranscode/etransmp3IM"
-var backupFolder = "D:/workspace/work/web/gitee/etranscode/etransmp3Backup"
+var mpFolder = ""
+var backupFolder = ""
 
 func main() {
 	fmt.Println("=====小程序同步工具=====")
 	fmt.Println("输入quit退出程序")
+	if err := loadConfig(); err != nil {
+		fmt.Println("配置载入错误:", err)
+		return
+	}
 	fmt.Println("小程序路径:", mpFolder)
 	fmt.Println("备份文件夹路径:", backupFolder)
-	loadConfig()
 	loop()
 }
 
