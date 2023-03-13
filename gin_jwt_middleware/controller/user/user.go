@@ -6,6 +6,7 @@ import (
 	"gjm/global"
 	dbModel "gjm/model/db"
 	userModel "gjm/model/request/user"
+	userResModel "gjm/model/response/user"
 	systemModel "gjm/model/system"
 	"gjm/utils"
 	"log"
@@ -64,11 +65,7 @@ func LoginController(ctx *gin.Context) {
 		const TokenExpireDuration = time.Hour * 24 * 7
 		auth, err := utils.GetToken(systemModel.TokenInfo{UserName: findUser.UserName, Id: int(findUser.ID)}, TokenExpireDuration)
 		if err == nil {
-			resModel.OkWithDetailed(
-				map[string]any{
-					"user":          findUser,
-					"authorization": auth,
-				}, "登录成功", ctx)
+			resModel.OkWithDetailed(userResModel.LoginResFromDBLogin(&findUser, auth), "登录成功", ctx)
 		} else {
 			resModel.FailWithMessage(err.Error(), ctx)
 		}
