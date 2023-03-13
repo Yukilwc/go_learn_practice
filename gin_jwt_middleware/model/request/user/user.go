@@ -1,13 +1,13 @@
 package user
 
 type Login struct {
-	UserName string `json:"userName"`
-	Password string `json:"password"`
+	UserName string `json:"userName" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 type Register struct {
-	UserName string `json:"userName"`
-	NickName string `json:"nickName"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	UserName string `json:"userName" validate:"required"`
+	NickName string `json:"nickName" validate:"required"`
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" validate:"required,myPassword"`
 }

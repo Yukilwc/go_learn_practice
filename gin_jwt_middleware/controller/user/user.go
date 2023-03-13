@@ -9,44 +9,71 @@ import (
 	systemModel "gjm/model/system"
 	"gjm/utils"
 	"log"
-	"net/http"
-	"strings"
+	"regexp"
 	"time"
 
 	resModel "gjm/model/response"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/mitchellh/mapstructure"
 	"gorm.io/gorm"
 )
 
+func myPasswordValidator(fl validator.FieldLevel) bool {
+	ps := fl.Field().String()
+	re := regexp.MustCompile(`^.{6,}$`)
+	return re.MatchString(ps)
+}
 func LoginController(ctx *gin.Context) {
 	var req userModel.Login
-	err := ctx.ShouldBindJSON(&req)
+	jsonMap := utils.PostJson2Map(ctx)
+	// 进行一些特殊处理
+	if err := mapstructure.Decode(jsonMap, &req); err != nil {
+		resModel.FailWithMessage(err.Error(), ctx)
+	}
+	fmt.Println("登录参数:", jsonMap, req)
+	//  validator
+	validate := validator.New()
+	validate.RegisterValidation("myPassword", myPasswordValidator)
+	err := validate.Struct(req)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println("validate error:", err.Error())
+		if _, ok := err.(*validator.InvalidValidationError); ok {
+			resModel.FailWithMessage(err.Error(), ctx)
+			return
+		}
+		err := err.(validator.ValidationErrors)[0]
+		switch err.Tag() {
+		case "required":
+			resModel.FailWithMessage(err.Field()+"字段不能为空", ctx)
+		default:
+			resModel.FailWithMessage(err.Error(), ctx)
+		}
 		return
 	}
-	fmt.Println("登录信息:", req.UserName)
-	if req.UserName == "admin" && req.Password == "123456" {
+	findUser := dbModel.User{}
+	result := global.DB.Where(&dbModel.User{UserName: req.UserName}).Take(&findUser)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		resModel.FailWithMessage("用户名不存在", ctx)
+		return
+	}
+	fmt.Println("用户信息:", findUser)
+	if req.Password == findUser.Password {
 		fmt.Println("账号密码验证正确")
 		const TokenExpireDuration = time.Hour * 24 * 7
-		auth, err := utils.GetToken(systemModel.TokenInfo{Name: req.UserName, Id: 1}, TokenExpireDuration)
+		auth, err := utils.GetToken(systemModel.TokenInfo{UserName: findUser.UserName, Id: int(findUser.ID)}, TokenExpireDuration)
 		if err == nil {
-			data := map[string]any{
-				"code": 0,
-				"msg":  "success",
-				"data": map[string]any{
-					"name":          req.UserName,
+			resModel.OkWithDetailed(
+				map[string]any{
+					"user":          findUser,
 					"authorization": auth,
-				},
-			}
-			ctx.JSON(http.StatusOK, data)
-
+				}, "登录成功", ctx)
 		} else {
-			ctx.JSON(http.StatusOK, gin.H{"code": 1, "msg": err.Error(), "data": nil})
+			resModel.FailWithMessage(err.Error(), ctx)
 		}
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{"code": 1, "msg": "密码错误", "data": nil})
+		resModel.FailWithMessage("密码错误", ctx)
 	}
 }
 func RegisterController(ctx *gin.Context) {
@@ -60,27 +87,30 @@ func RegisterController(ctx *gin.Context) {
 		return
 	}
 	fmt.Println("注册:", register)
-	// TODO:改成基于tag的校验
-	// 校验非空
-	if strings.TrimSpace(register.UserName) == "" {
-		resModel.FailWithMessage("参数不能为空", ctx)
-		return
+	//  validator
+	validate := validator.New()
+	validate.RegisterValidation("myPassword", myPasswordValidator)
+	err = validate.Struct(register)
+	if err != nil {
+		fmt.Println("validate error:", err.Error())
+		if _, ok := err.(*validator.InvalidValidationError); ok {
+			resModel.FailWithMessage(err.Error(), ctx)
+			return
+		}
+		err := err.(validator.ValidationErrors)[0]
+		switch err.Tag() {
+		case "required":
+			resModel.FailWithMessage(err.Field()+"字段不能为空", ctx)
+		case "myPassword":
+			resModel.FailWithMessage("密码至少为6位字符组成", ctx)
+		default:
+			resModel.FailWithMessage(err.Error(), ctx)
+		}
 	}
-	if strings.TrimSpace(register.NickName) == "" {
-		resModel.FailWithMessage("参数不能为空", ctx)
-		return
-	}
-	if strings.TrimSpace(register.Email) == "" {
-		resModel.FailWithMessage("参数不能为空", ctx)
-		return
-	}
-	if strings.TrimSpace(register.Password) == "" {
-		resModel.FailWithMessage("参数不能为空", ctx)
-		return
-	}
+
 	// 校验重复
 	findUser := dbModel.User{}
-	result := global.DB.Where(&dbModel.User{NickName: register.NickName}).Take(&findUser)
+	result := global.DB.Where(&dbModel.User{UserName: register.UserName}).Take(&findUser)
 	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		log.Println("存在同名的:", findUser)
 		resModel.FailWithMessage("用户名已存在", ctx)
@@ -114,6 +144,5 @@ func ListController(ctx *gin.Context) {
 		"list": []any{},
 		"info": info,
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"code": 1, "msg": "", "data": data})
+	resModel.OkWithDetailed(data, "success", ctx)
 }
