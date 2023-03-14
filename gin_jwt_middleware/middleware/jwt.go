@@ -31,7 +31,7 @@ func JWTAuth() gin.HandlerFunc {
 		claims, err := utils.ParseToken(parts[1])
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
-				fmt.Println("token过期")
+				fmt.Println("token过期,", claims.ExpiresAt.Time.String())
 			}
 			// 判断下过期
 			// response.FailForbidden(nil, err.Error(), ctx)

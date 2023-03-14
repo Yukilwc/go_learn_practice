@@ -8,4 +8,5 @@ mysql:
 jwt:
   secret: "my-secret"
   expiresTime: 10 # 60480
+  bufferTime: 60480 # 60480 过期后，刷新时间7天
   issuer: "Misaka"

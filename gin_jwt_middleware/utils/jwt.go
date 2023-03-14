@@ -32,10 +32,12 @@ func ParseToken(tokenString string) (*model_system.CustomClaims, error) {
 	// }
 	if claims, ok := token.Claims.(*model_system.CustomClaims); ok && token.Valid {
 		return claims, nil
+	} else {
+		// 判断下是否是过期导致的
+		fmt.Println("token valid error:", err)
+		return claims, err
 	}
-	// 判断下是否是过期导致的
-	fmt.Println("token valid error:")
-	return nil, err
+
 }
 
 func TokenIsExpired(err error) {
