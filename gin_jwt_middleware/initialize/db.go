@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"gjm/config"
 	"gjm/global"
 	"log"
 
@@ -11,13 +10,8 @@ import (
 
 // 连接数据库
 func InitDB() error {
-	userName := config.DB["name"]
-	password := config.DB["password"]
-	path := "localhost"
-	port := "3306"
-	dbName := "ggg_test"
 	mysqlConfig := mysql.Config{
-		DSN: userName + ":" + password + "@tcp(" + path + ":" + port + ")/" + dbName + "?" + "charset=utf8&parseTime=true",
+		DSN: global.CONFIG.Mysql.Dsn(),
 	}
 	gormConfig := gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), &gormConfig); err != nil {

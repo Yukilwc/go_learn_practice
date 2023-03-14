@@ -1,5 +1,12 @@
 package global
 
-import "gorm.io/gorm"
+import (
+	"gjm/config"
 
-var DB *gorm.DB
+	"gorm.io/gorm"
+)
+
+var (
+	CONFIG config.ProjectConfig
+	DB     *gorm.DB
+)

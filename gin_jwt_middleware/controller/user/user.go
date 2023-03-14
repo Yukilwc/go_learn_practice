@@ -62,7 +62,7 @@ func LoginController(ctx *gin.Context) {
 	fmt.Println("用户信息:", findUser)
 	if req.Password == findUser.Password {
 		fmt.Println("账号密码验证正确")
-		const TokenExpireDuration = time.Hour * 24 * 7
+		var TokenExpireDuration = global.CONFIG.JWT.ExpiresTime * time.Second
 		auth, err := utils.GetToken(systemModel.TokenInfo{UserName: findUser.UserName, Id: int(findUser.ID)}, TokenExpireDuration)
 		if err == nil {
 			resModel.OkWithDetailed(userResModel.LoginResFromDBLogin(&findUser, auth), "登录成功", ctx)

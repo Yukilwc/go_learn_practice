@@ -1,0 +1,11 @@
+mysql:
+  userName: "root"
+  password: "123456abc"
+  path: "localhost"
+  port: "3306"
+  dbName: "ggg_test"
+  config: "charset=utf8&parseTime=true"
+jwt:
+  secret: "my-secret"
+  expiresTime: 10 # 60480
+  issuer: "Misaka"
