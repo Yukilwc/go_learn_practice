@@ -7,6 +7,6 @@ mysql:
   config: "charset=utf8&parseTime=true"
 jwt:
   secret: "my-secret"
-  expiresTime: 10 # 60480
-  bufferTime: 60480 # 60480 过期后，刷新时间7天
+  expiresTime: 86400 # 86400 1天
+  bufferTime: 604800 # 过期后，刷新时间7天
   issuer: "Misaka"

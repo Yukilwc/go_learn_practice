@@ -10,12 +10,14 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GetToken(info model_system.TokenInfo, expiresTime time.Duration) (string, error) {
+func GetToken(info model_system.TokenInfo, expiresTime int64) (string, error) {
+	expiresAt := jwt.NewNumericDate(time.Now().Add(time.Duration(expiresTime) * time.Second))
+	fmt.Println("get token设定的expiredAt:", expiresAt.Time.String())
 	c := model_system.CustomClaims{
 		Info: info,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresTime)),
 			Issuer:    global.CONFIG.JWT.Issuer,
+			ExpiresAt: expiresAt,
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)

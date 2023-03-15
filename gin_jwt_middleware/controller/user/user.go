@@ -11,7 +11,6 @@ import (
 	"gjm/utils"
 	"log"
 	"regexp"
-	"time"
 
 	resModel "gjm/model/response"
 
@@ -62,8 +61,7 @@ func LoginController(ctx *gin.Context) {
 	fmt.Println("用户信息:", findUser)
 	if req.Password == findUser.Password {
 		fmt.Println("账号密码验证正确")
-		var TokenExpireDuration = global.CONFIG.JWT.ExpiresTime * time.Second
-		auth, err := utils.GetToken(systemModel.TokenInfo{UserName: findUser.UserName, Id: int(findUser.ID)}, TokenExpireDuration)
+		auth, err := utils.GetToken(systemModel.TokenInfo{UserName: findUser.UserName, Id: int(findUser.ID)}, global.CONFIG.JWT.ExpiresTime)
 		if err == nil {
 			resModel.OkWithDetailed(userResModel.LoginResFromDBLogin(&findUser, auth), "登录成功", ctx)
 		} else {
