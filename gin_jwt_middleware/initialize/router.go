@@ -11,6 +11,8 @@ import (
 // 初始化gin
 func InitRouter() {
 	Router := gin.Default()
+	// 跨域
+	Router.Use(middleware.Cors())
 	// authGroup := Router.Group("/")
 	// {
 	// 	authGroup.POST("/list", ListController)
