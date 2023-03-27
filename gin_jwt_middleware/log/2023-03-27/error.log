@@ -1,1 +1,3 @@
 {"level":"ERROR","ts":1679900930.2221127,"caller":"initialize/logger.go:22","msg":"打印error信息"}
+{"level":"ERROR","ts":1679903285.8703744,"caller":"initialize/logger.go:22","msg":"打印error信息"}
+{"level":"ERROR","ts":1679903836.6320565,"caller":"initialize/logger.go:22","msg":"打印error信息"}

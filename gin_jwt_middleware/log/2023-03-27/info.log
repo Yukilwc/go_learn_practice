@@ -1,1 +1,5 @@
 {"level":"INFO","ts":1679900930.221609,"caller":"initialize/logger.go:21","msg":"打印info信息"}
+{"level":"INFO","ts":1679903285.869869,"caller":"initialize/logger.go:21","msg":"打印info信息"}
+{"level":"INFO","ts":1679903341.41575,"caller":"zap@v0.1.0/zap.go:90","msg":"/list","status":301,"method":"POST","path":"/list","query":"","ip":"::1","user-agent":"PostmanRuntime/7.31.3","latency":0.0011402,"time":"2023-03-27T07:49:01Z"}
+{"level":"INFO","ts":1679903341.421814,"caller":"zap@v0.1.0/zap.go:90","msg":"/home","status":404,"method":"GET","path":"/home","query":"","ip":"::1","user-agent":"PostmanRuntime/7.31.3","latency":0,"time":"2023-03-27T07:49:01Z"}
+{"level":"INFO","ts":1679903836.6315184,"caller":"initialize/logger.go:21","msg":"打印info信息"}

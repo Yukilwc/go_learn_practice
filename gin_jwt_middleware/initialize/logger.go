@@ -32,6 +32,7 @@ func GetZapCores() []zapcore.Core {
 
 	} else if global.ENV == "production" {
 		fmt.Println("构造生产环境zap logger")
+		cores = append(cores, GetFileCores()...)
 	}
 	return cores
 }

@@ -10,6 +10,9 @@ import (
 
 // 初始化gin
 func InitRouter() {
+	// Router := gin.New()
+	// Router.Use(ginzap.Ginzap(global.LOG, time.RFC3339, true))
+	// Router.Use(ginzap.RecoveryWithZap(global.LOG, true))
 	Router := gin.Default()
 	// 跨域
 	Router.Use(middleware.Cors())
