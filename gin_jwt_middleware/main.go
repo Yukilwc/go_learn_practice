@@ -14,6 +14,7 @@ func main() {
 		// log.Fatal(err.Error())
 		panic(err)
 	}
+	initialize.StartTimer()
 	initialize.InitRouter()
 
 }

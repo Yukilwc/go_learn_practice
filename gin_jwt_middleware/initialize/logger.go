@@ -3,7 +3,6 @@ package initialize
 import (
 	"fmt"
 	"gjm/global"
-	"gjm/utils"
 	"os"
 	"path"
 	"time"
@@ -133,29 +132,4 @@ func GetSingleLevelEnablerFunc(level zapcore.Level) zap.LevelEnablerFunc {
 			return level == zap.DebugLevel
 		}
 	}
-}
-
-// 获取构建的core
-func GetZapCoresOld() []zapcore.Core {
-	// 文件输出路径
-	var path = "log"
-	if ok, _ := utils.FolderExists(path); !ok {
-		_ = os.Mkdir(path, os.ModePerm)
-	}
-	f, err := os.OpenFile(path+"/1.log", os.O_CREATE|os.O_RDWR, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
-	// 创建encoder
-	// 默认的encoder config
-	config := zap.NewProductionEncoderConfig()
-	config.EncodeTime = zapcore.ISO8601TimeEncoder
-	config.EncodeLevel = zapcore.CapitalLevelEncoder
-	fileEncoder := zapcore.NewJSONEncoder(config)
-	consoleEncoder := zapcore.NewConsoleEncoder(config)
-	fileCore := zapcore.NewCore(fileEncoder, zap.CombineWriteSyncers(f), zap.DebugLevel)
-	consoleCore := zapcore.NewCore(consoleEncoder, os.Stdout, zap.DebugLevel)
-	cores := []zapcore.Core{fileCore, consoleCore}
-	return cores
-
 }
