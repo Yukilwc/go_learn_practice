@@ -20,7 +20,7 @@ func main() {
 }
 func addGitPush(cron *cron.Cron) {
 	// spec := "0 0 18 * * *"
-	spec := "53 18 * * *"
+	spec := "35 18 * * *"
 	_, err := cron.AddFunc(spec, doGitPush)
 	if err != nil {
 		fmt.Println(err)
@@ -32,6 +32,7 @@ func doGitPush() {
 		"D:\\workspace\\libiary\\ForTest\\go_code\\go_test_init\\",
 		"D:\\workspace\\libiary\\my\\InclusiveLibrary\\",
 		"D:\\workspace\\libiary\\my\\ProjectTemplate\\vue-docker\\",
+		"D:\\workspace\\libiary\\my\\go-vue3-admin-template\\",
 	}
 	for _, v := range pathList {
 		//切换到指定文件夹
@@ -43,6 +44,7 @@ func doGitPush() {
 		cmd.Run()
 		cmd = exec.Command("git", "push")
 		cmd.Run()
+		fmt.Println("push finished:", v)
 	}
 
 }
