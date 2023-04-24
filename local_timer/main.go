@@ -20,7 +20,7 @@ func main() {
 }
 func addGitPush(cron *cron.Cron) {
 	// spec := "0 0 18 * * *"
-	spec := "35 18 * * *"
+	spec := "25 18 * * *"
 	fmt.Println("spec is:", spec)
 	_, err := cron.AddFunc(spec, doGitPush)
 	if err != nil {
