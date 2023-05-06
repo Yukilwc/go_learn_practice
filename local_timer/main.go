@@ -34,6 +34,7 @@ func doGitPush() {
 		"D:\\workspace\\libiary\\my\\InclusiveLibrary\\",
 		"D:\\workspace\\libiary\\my\\ProjectTemplate\\vue-docker\\",
 		"D:\\workspace\\libiary\\my\\go-vue3-admin-template\\",
+		"D:\\workspace\\libiary\\my\\script-tools\\",
 	}
 	for _, v := range pathList {
 		//切换到指定文件夹
